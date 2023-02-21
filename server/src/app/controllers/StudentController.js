@@ -21,15 +21,33 @@ const createStudent = async (req, res) => {
 
 const updateStudent = async (req, res) => {
   try {
+    const updatedData = {
+      ...req.body,
+      class: req.body.class._id,
+    };
+
     const myStudent = await Student.findByIdAndUpdate(
       req.params.id,
       {
-        $set: req.body,
+        $set: updatedData,
       },
       {
         new: true,
       }
     ).populate({ path: "class" });
+
+    //Remove student from old class
+    const oldClass = await Class.findByIdAndUpdate(myStudent.class._id, {
+      $pull: { students: myStudent._id },
+    });
+
+    // Add student to new class
+    const newClass = await Class.findByIdAndUpdate(req.body.class, {
+      $push: { students: myStudent._id },
+    });
+
+    console.log({ oldClass, body: req.body });
+
     return res.status(200).json(myStudent);
   } catch (err) {
     return res.status(500).json(err);
