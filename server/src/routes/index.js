@@ -1,13 +1,11 @@
-const ItemRouter = require('./items');
-const OrderRouter = require('./orders');
-const UserRouter = require('./users');
-const AuthRouter = require('./auth');
+const StudentRouter = require("./students");
+const ClassRouter = require("./classes");
+const SchoolRouter = require("./school");
 
 function route(app) {
-  app.use('/api/items', ItemRouter);
-  app.use('/api/orders', OrderRouter);
-  app.use('/api/users', UserRouter);
-  app.use('/api/auth', AuthRouter);
+  app.use("/api/students", StudentRouter);
+  app.use("/api/classes", ClassRouter);
+  app.use("/api/school", SchoolRouter);
 }
 
 module.exports = route;
